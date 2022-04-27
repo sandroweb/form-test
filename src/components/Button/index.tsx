@@ -14,8 +14,9 @@ const Wrapper = styled.button`
   border-width: 1px;
   background-color: transparent;
   transition: all 0.3s ease;
-  padding: 3px 6px;
+  padding: 3px 25px;
   height: 22px;
+  cursor: pointer;
   &.block {
     width: 100%;
   }
@@ -23,6 +24,7 @@ const Wrapper = styled.button`
     &:hover, &:focus {
       background-color: ${ ThemeColor.Highlight };
       color: ${ ThemeColor.Bege };
+      border-color: transparent;
     }
   }
   &:disabled {

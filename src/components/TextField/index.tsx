@@ -37,7 +37,7 @@ const Wrapper = styled.div`
 
 export interface TextFieldProps {
   type?: HTMLInputTypeAttribute;
-  name: string,
+  name?: string,
   label: ReactNode;
   error?: ReactNode;
   disabled?: boolean;

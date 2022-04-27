@@ -1,13 +1,14 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, Fragment } from "react";
 import BarWave from "react-cssfx-loading/lib/BarWave";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Container from "../../components/Container";
+import Grid from "../../components/Grid";
 import { EditRoutePath } from "../../components/library/Routes";
 import SectionTitle from "../../components/SectionTitle";
+import TextField from "../../components/TextField";
 import { ThemeColor } from "../../enuns/ThemeColors";
-import Person from "../../interfaces/Person";
-import { loadPeople } from "../../services/People";
+import Provider, { Consumer } from "./Provider";
 
 const Wrapper = styled.div`
   display: flex;
@@ -23,61 +24,72 @@ const Content = styled(Container)`
   flex-direction: column;
 `
 
-const List: FC = props => {
-  const navigate = useNavigate();
-  const [people, setPeople] = useState<Person[]>();
-
-  const refreshList = useCallback(() => {
-    loadPeople()
-      .then(response => setPeople(response.data))
-  }, [setPeople]);
-
-  const gotoEdit = useCallback((id: number) => {
-    navigate(EditRoutePath.replace(':id', id.toString()));
-  }, [navigate]);
-
-  useEffect(() => {
-    refreshList();
-    // eslint-disable-next-line
-  }, []);
+const List: FC = () => {
 
   return (
-    <Wrapper>
-      <Content>
-        <SectionTitle>
-          Clientes
-        </SectionTitle>
-        { !people && <BarWave color={ ThemeColor.Highlight } /> }
+    <Provider>
+      <Consumer>
         {
-          !!people && people?.length > 0 && (
-            <table>
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>RG</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
+          ({
+            hasPeople,
+            list,
+            toSearchTerm,
+            setToSearchTerm,
+            gotoEdit
+          }) => (
+            <Wrapper>
+              <Content>
+                <SectionTitle>
+                  Clientes
+                </SectionTitle>
+                <Grid container>
+                  { !hasPeople && <Grid><BarWave color={ ThemeColor.Highlight } /></Grid> }
+                </Grid>
                 {
-                  people.map((it, key) => (
-                    <tr onClick={() => gotoEdit(it.id)} key={ key }>
-                      <td>{ it.name }</td>
-                      <td>{ it.rg }</td>
-                      <td>
-                        <Link to={ EditRoutePath.replace(':id', it.id.toString()) }>
-                          Editar
-                        </Link>
-                      </td>
-                    </tr>
-                  ))
+                  hasPeople && (
+                    <Fragment>
+                      <Grid>
+                        <TextField
+                          label="Procurar por:"
+                          value={ toSearchTerm }
+                          onChange={ v => typeof v === 'string' && setToSearchTerm(v) }
+                        />
+                      </Grid>
+                      <Grid>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Nome</th>
+                              <th>RG</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {
+                              list.map((it, key) => (
+                                <tr onClick={() => gotoEdit(it.id)} key={ key }>
+                                  <td>{ it.name }</td>
+                                  <td>{ it.rg }</td>
+                                  <td>
+                                    <Link to={ EditRoutePath.replace(':id', it.id.toString()) }>
+                                      Editar
+                                    </Link>
+                                  </td>
+                                </tr>
+                              ))
+                            }
+                          </tbody>
+                        </table>
+                      </Grid>
+                    </Fragment>
+                  )
                 }
-              </tbody>
-            </table>
+              </Content>
+            </Wrapper>
           )
         }
-      </Content>
-    </Wrapper>
+      </Consumer>
+    </Provider>
   );
 };
 

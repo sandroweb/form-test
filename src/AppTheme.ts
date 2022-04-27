@@ -100,6 +100,50 @@ const AppTheme = createGlobalStyle`
       }
     }
   }
+  .Toastify {
+    &__toast {
+      border-radius: 4px;
+      align-items: center;
+    
+      &--success {
+        color: ${ ThemeColor.Highlight } !important;
+        .Toastify {
+          &__toast {
+            &-body, &-icon {
+              color: ${ ThemeColor.Highlight } !important;
+              svg {
+                fill: ${ ThemeColor.Highlight } !important;
+              }
+            }
+          }
+          &__progress {
+            &-bar {
+              background-color: ${ ThemeColor.Highlight } !important;
+            }
+          }
+        }
+      }
+    
+      &--error {
+        color: ${ ThemeColor.Error } !important;
+        .Toastify {
+          &__toast {
+            &-body, &-icon {
+              color: ${ ThemeColor.Error } !important;
+              svg {
+                fill: ${ ThemeColor.Error } !important;
+              }
+            }
+          }
+          &__progress {
+            &-bar {
+              background-color: ${ ThemeColor.Error } !important;
+            }
+          }
+        }
+      }
+    }
+  }
 `;
 
 export default AppTheme;

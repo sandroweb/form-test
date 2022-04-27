@@ -11,7 +11,7 @@ const Field: FC<FieldRenderProps<any, HTMLElement, any>> = (props) => {
       value={ props.input.value }
       label="CPF"
       mask={ cpfInputMask }
-      error={ (newer ? props.meta.error && props.meta.touched : props.meta.error) ? props.meta.error : '' }
+      error={ !fieldsDisabled && (newer ? props.meta.error && props.meta.touched : props.meta.error) ? props.meta.error : '' }
       onChange={ props.input.onChange }
       disabled={ fieldsDisabled }
     />

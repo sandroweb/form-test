@@ -3,6 +3,9 @@ import { ThemeColor } from "../../enuns/ThemeColors";
 import Container from "../Container";
 import { MainRoutePath, NewRoutePath } from "../library/Routes";
 import MenuItem from "./MenuItem";
+import { MdAdd, MdList } from "react-icons/md";
+import AppContext from "../../AppContext";
+import { useContext } from "react";
 
 const Wrapper = styled.div`
   display: flex;
@@ -32,13 +35,14 @@ flex-direction: row;
 `
 
 const TopBar = () => {
+  const { isMobile } = useContext(AppContext);
 
   return (
     <Wrapper>
       <Content>
-        <MenuItem path={ MainRoutePath }>Lista</MenuItem>
-        <Separator />
-        <MenuItem path={ NewRoutePath }>Adicionar</MenuItem>
+        <MenuItem path={ MainRoutePath } icon={ <MdList /> }>Lista</MenuItem>
+        { !isMobile && <Separator /> }
+        <MenuItem path={ NewRoutePath } icon={ <MdAdd /> }>Adicionar</MenuItem>
       </Content>
     </Wrapper>
   );

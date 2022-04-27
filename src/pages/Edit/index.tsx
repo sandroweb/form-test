@@ -34,7 +34,7 @@ const Edit: FC = props => {
     <Provider>
       <Consumer>
         {
-          ({ newer, person, onSubmit }) => (
+          ({ newer, person, onSubmit, fieldsDisabled }) => (
             <Wrapper>
               <Content>
                 <SectionTitle>
@@ -67,7 +67,7 @@ const Edit: FC = props => {
                             <Button
                               type="submit"
                               disabled={
-                                invalid && submitFailed
+                                fieldsDisabled || (invalid && submitFailed)
                               }
                             >
                               Enviar

@@ -10,7 +10,7 @@ const Field: FC<FieldRenderProps<any, HTMLElement, any>> = (props) => {
       name={ props.input.name }
       value={ props.input.value }
       label="Nome"
-      error={ (newer ? props.meta.error && props.meta.touched : props.meta.error) ? props.meta.error : '' }
+      error={ !fieldsDisabled && (newer ? props.meta.error && props.meta.touched : props.meta.error) ? props.meta.error : '' }
       onChange={ props.input.onChange }
       maxLength={ 150 }
       disabled={ fieldsDisabled }

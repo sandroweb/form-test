@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { toast } from 'react-toastify';
 import { EditRoutePath } from "../../components/library/Routes";
 import Person from "../../interfaces/Person";
 import { addPerson, loadPerson, updatePerson } from "../../services/People";
@@ -37,10 +38,30 @@ const Provider: FC<PropsWithChildren<EditProvider>> = ({
         .then(response => {
           navigate(EditRoutePath.replace(':id', response.data.id.toString()))
         })
-        .finally(() => setSaving(false));
+        .catch(error => {
+          toast.dark('Erro ao tentar cadastrar cliente!', {
+            type: 'error',
+          });
+        })
+        .finally(() => {
+          toast.dark('Cliente cadastrado com sucesso!', {
+            type: 'success',
+          });
+          setSaving(false);
+        });
     } else if(!!newPerson?.id) {
       updatePerson(newPerson)
-        .finally(() => setSaving(false));
+        .catch(error => {
+          toast.dark('Erro ao tentar atualizar os dados do cliente!', {
+            type: 'error',
+          });
+        })
+        .finally(() => {
+          toast.dark('Cliente salvo com sucesso!', {
+            type: 'success',
+          });
+          setSaving(false);
+        });
     }
   }, [setSaving, newer, navigate]);
 
@@ -54,9 +75,11 @@ const Provider: FC<PropsWithChildren<EditProvider>> = ({
   useEffect(() => {
     if (!!id) {
       load();
+    } else {
+      setPerson(undefined)
     }
     // eslint-disable-next-line
-  }, []);
+  }, [id]);
 
   return (
     <Context.Provider value={{
